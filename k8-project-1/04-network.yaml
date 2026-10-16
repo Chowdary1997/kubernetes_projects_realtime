@@ -4,6 +4,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny-ingress
+  namespace: project1
 spec:
   podSelector: {}
   policyTypes: ["Ingress"]
@@ -12,6 +13,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-ingress-to-frontend
+  namespace: project1
 spec:
   podSelector:
     matchLabels:
@@ -30,6 +32,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-frontend-to-backend
+  namespace: project1
 spec:
   podSelector:
     matchLabels:
@@ -48,6 +51,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-backend-to-postgres
+  namespace: project1
 spec:
   podSelector:
     matchLabels:
