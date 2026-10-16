@@ -1,0 +1,32 @@
+# Exact: /api matches only the exact path /api. Apply this OR project1-ingress.yaml, not both.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: project1
+  namespace: project1
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - project1.example.com
+      secretName: project1-tls
+  rules:
+    - host: project1.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Exact
+            backend:
+              service:
+                name: api
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: project1
+                port:
+                  number: 80
