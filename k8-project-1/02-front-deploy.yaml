@@ -29,7 +29,7 @@ metadata:
               type: RuntimeDefault
           containers:
             - name: frontend
-              image: coming-soon-frontend:latest
+              image: daggu1997/kubec_project_front:v1.0.0
               ports:
                 - name: http
                   containerPort: 8080

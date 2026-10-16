@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: postgres
-          image: coming-soon-db:latest
+          image: daggu1997/kube_project_data:v1.0.0
           ports:
             - name: postgres
               containerPort: 5432

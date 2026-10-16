@@ -29,7 +29,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: backend
-          image: coming-soon-backend:latest
+          image: daggu1997/kubec_project_back:v1.0.0
           ports:
             - name: http
               containerPort: 3000
