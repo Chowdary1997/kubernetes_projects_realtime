@@ -35,38 +35,53 @@ spec:
             - name: http
               containerPort: 3000
           envFrom:
-            - configMapRef: {name: coming-soon-config}
-            - secretRef: {name: coming-soon-secrets}
+            - configMapRef:
+                name: project1-config
+            - secretRef:
+                name: coming-soon-secrets
           env:
-            # Explicit entries first: Kubernetes expands $(VAR) only from earlier env entries.
+            # Explicit entries first: $(VAR) expansion only uses earlier env entries.
             - name: POSTGRES_USER
               valueFrom:
-                configMapKeyRef: {name: coming-soon-config, key: POSTGRES_USER}
+                configMapKeyRef:
+                  name: project1-config
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
-                secretKeyRef: {name: coming-soon-secrets, key: POSTGRES_PASSWORD}
+                secretKeyRef:
+                  name: coming-soon-secrets
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
-                configMapKeyRef: {name: coming-soon-config, key: POSTGRES_DB}
+                configMapKeyRef:
+                  name: project1-config
+                  key: POSTGRES_DB
             - name: DATABASE_URL
               value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)"
-            # nginx and the ingress controller are two trusted hops in front of the backend.
-            - name: TRUST_PROXY
-              value: "2"
           startupProbe:
-            httpGet: {path: /api/health, port: http}
+            httpGet:
+              path: /api/health
+              port: http
             periodSeconds: 3
             failureThreshold: 40
           readinessProbe:
-            httpGet: {path: /api/health, port: http}
+            httpGet:
+              path: /api/health
+              port: http
             periodSeconds: 10
           livenessProbe:
-            httpGet: {path: /api/health, port: http}
+            httpGet:
+              path: /api/health
+              port: http
             periodSeconds: 20
             failureThreshold: 3
           resources:
-            requests: {cpu: 100m, memory: 128Mi}
-            limits: {memory: 256Mi}
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

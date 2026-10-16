@@ -1,23 +1,14 @@
-# Requires a CNI that enforces NetworkPolicy (Calico, Cilium, or a cloud equivalent).
-# Traffic path: ingress controller -> frontend -> backend -> postgres. Nothing else may connect.
+# Keeps default-deny-ingress in place and adds explicit allows.
+# Delete the old allow-ingress-controller policy before applying this.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: default-deny-ingress
-  namespace: project1
-spec:
-  podSelector: {}
-  policyTypes: ["Ingress"]
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-ingress-to-frontend
+  name: allow-ingress-to-web
   namespace: project1
 spec:
   podSelector:
     matchLabels:
-      app: frontend
+      app: project1
   policyTypes: ["Ingress"]
   ingress:
     - from:
@@ -31,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-frontend-to-backend
+  name: allow-ingress-to-backend
   namespace: project1
 spec:
   podSelector:
@@ -40,9 +31,12 @@ spec:
   policyTypes: ["Ingress"]
   ingress:
     - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
         - podSelector:
             matchLabels:
-              app: frontend
+              app: project1
       ports:
         - protocol: TCP
           port: 3000

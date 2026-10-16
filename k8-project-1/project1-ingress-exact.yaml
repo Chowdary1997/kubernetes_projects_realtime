@@ -20,7 +20,7 @@ spec:
             pathType: Exact
             backend:
               service:
-                name: api
+                name: backend
                 port:
                   number: 80
           - path: /
